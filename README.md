@@ -22,22 +22,22 @@ Funcionalidades que incorpora la app
 5.  Detalle item del pokemon buscado
 6.  Pantalla para cerrar sesión
 
-#1.- Registro de usuario
+1.- Registro de usuario
 
 ![Alt text](https://github.com/elagosq/AppPokemon/blob/main/pantallas/2.-Registro_usuario.png "Registro")
 
-#2.- Login de usuario
+2.- Login de usuario
 
 ![Alt text](https://github.com/elagosq/AppPokemon/blob/main/pantallas/1.-Login.png "Login")
 
-#3.- Home
+3.- Home
 ![Alt text](https://github.com/elagosq/AppPokemon/blob/main/pantallas/3.-home.png "Home")
 
-#4.- Detalle
+4.- Detalle
 ![Alt text](https://github.com/elagosq/AppPokemon/blob/main/pantallas/4.-detalle.png "Detalle")
 
-#5.- Pantalla para buscar un Pokemon
+5.- Pantalla para buscar un Pokemon
 ![Alt text](https://github.com/elagosq/AppPokemon/blob/main/pantallas/5.-buscar_item.png "Buscar")
 
-#6.- Cerrar sesión
+6.- Cerrar sesión
 ![Alt text](https://github.com/elagosq/AppPokemon/blob/main/pantallas/7.-cerrar_sesion.png "Cerrar sesion")
