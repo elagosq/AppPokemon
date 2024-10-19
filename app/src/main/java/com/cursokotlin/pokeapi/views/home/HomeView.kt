@@ -17,25 +17,33 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.cursokotlin.pokeapi.components.ButtonGoBack
-import com.cursokotlin.pokeapi.components.ItemPoke
+import com.cursokotlin.pokeapi.components.ItemRow
 import com.cursokotlin.pokeapi.components.Loading
 import com.cursokotlin.pokeapi.components.MainTopBar
 import com.cursokotlin.pokeapi.util.Constants.Companion.CUSTOM_GREEN
+import com.cursokotlin.pokeapi.viewModels.FavoritesViewModel
 import com.cursokotlin.pokeapi.viewModels.PokemonViewModel
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun HomeView(navController: NavController, pokemonVM: PokemonViewModel = hiltViewModel()) {
+fun HomeView(
+    navController: NavController,
+    pokemonVM: PokemonViewModel = hiltViewModel(),
+    viewModel: FavoritesViewModel = viewModel()
+) {
     Scaffold(
         topBar = {
             MainTopBar(
@@ -57,21 +65,27 @@ fun HomeView(navController: NavController, pokemonVM: PokemonViewModel = hiltVie
             }
         }
     ) {
-        ContentHomeView(it, navController, pokemonVM)
+        ContentHomeView(it, navController, pokemonVM, viewModel)
     }
 }
 
 @Composable
-fun ContentHomeView(pad: PaddingValues, navController: NavController, viewModel: PokemonViewModel) {
-
+fun ContentHomeView(
+    pad: PaddingValues,
+    navController: NavController,
+    pokemonVM: PokemonViewModel,
+    viewModel: FavoritesViewModel
+) {
     val pokemonsPage =
-        viewModel.pokemonsPage.collectAsLazyPagingItems() //Obtener los datos de la paginación
+        pokemonVM.pokemonsPage.collectAsLazyPagingItems() //Obtener los datos de la paginación
+    val favoriteItemList by viewModel.favoriteItemList.collectAsState()
 
     ButtonGoBack()
     Column(
         modifier = Modifier
             .padding(pad)
             .fillMaxSize()
+            .background(Color.White)
     ) {
         if (pokemonsPage.itemCount == 0) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -87,7 +101,7 @@ fun ContentHomeView(pad: PaddingValues, navController: NavController, viewModel:
                 items(pokemonsPage.itemCount) { index ->
                     val item = pokemonsPage[index]
                     if (item != null) {
-                        ItemPoke(item) {
+                        ItemRow(item, viewModel, favoriteItemList) {
                             navController.navigate("DetailView/${item.name}")
                         }
                     }

@@ -72,6 +72,7 @@ dependencies {
     implementation(libs.converter.gson)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.datastore.preferences)
+    implementation(libs.google.gson)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

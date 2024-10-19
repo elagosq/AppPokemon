@@ -17,7 +17,7 @@ import com.cursokotlin.pokeapi.views.login.TabsViewLogin
 @Composable
 fun NavManager() {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = "LoginView") {
+    NavHost(navController = navController, startDestination = "HomeView") {
         composable("LoginView") {
             TabsViewLogin(navController)
         }

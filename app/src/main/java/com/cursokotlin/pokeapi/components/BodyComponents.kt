@@ -1,14 +1,7 @@
 package com.cursokotlin.pokeapi.components
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.animateColor
-import androidx.compose.animation.core.FastOutLinearInEasing
-import androidx.compose.animation.core.LinearOutSlowInEasing
-import androidx.compose.animation.core.animateDp
-import androidx.compose.animation.core.keyframes
-import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -20,7 +13,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -35,7 +27,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -59,6 +50,7 @@ import androidx.compose.ui.window.Dialog
 import coil.compose.rememberAsyncImagePainter
 import com.cursokotlin.pokeapi.model.PokemonList
 import com.cursokotlin.pokeapi.util.Constants.Companion.CUSTOM_GREEN
+import com.cursokotlin.pokeapi.viewModels.FavoritesViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -108,7 +100,12 @@ fun MainTopBar(
 }
 
 @Composable
-fun ItemPoke(item: PokemonList, function: () -> Unit) {
+fun ItemRow(
+    item: PokemonList,
+    viewModel: FavoritesViewModel,
+    favoriteItemList: List<PokemonList>,
+    function: () -> Unit
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -120,10 +117,7 @@ fun ItemPoke(item: PokemonList, function: () -> Unit) {
             )
             .clickable { function() }
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
+        Column(modifier = Modifier.fillMaxWidth()) {
             val components = item.url.split("/")
             val id = components[components.size - 2].toIntOrNull() ?: 0
             Row(
@@ -139,7 +133,22 @@ fun ItemPoke(item: PokemonList, function: () -> Unit) {
                     h = 80
                 )
                 Text(text = item.name, color = Color.Black, fontWeight = FontWeight.ExtraBold)
-                IconToggleFavorite()
+                IconButton(onClick = {
+                      if (favoriteItemList.contains(item)) {
+                          viewModel.removeFavoriteItem(item)
+                      } else {
+                          viewModel.addFavoriteItem(item)
+                      }
+                  }) {
+                      Icon(
+                          imageVector = if (favoriteItemList.contains(item)) {
+                              Icons.Default.Favorite
+                          } else {
+                              Icons.Default.FavoriteBorder
+                          },
+                          contentDescription = null
+                      )
+                  }
             }
         }
     }
@@ -179,46 +188,6 @@ fun Alert(
     )
 }
 
-@SuppressLint("UnusedTransitionTargetStateParameter")
-@Composable
-fun IconToggleFavorite() {
-    val checkState = remember { mutableStateOf(false) }
-    IconToggleButton(
-        checked = checkState.value,
-        onCheckedChange = {
-            checkState.value = !checkState.value
-        }) {
-        val transition = updateTransition(targetState = checkState.value, label = "")
-        val myTint by transition.animateColor(label = "") { isChecked ->
-            if (isChecked) {
-                Color.Red
-            } else {
-                Color.Black
-            }
-        }
-        val mySize by transition.animateDp(
-            label = "",
-            transitionSpec = {
-                keyframes {
-                    durationMillis = 250
-                    120.dp at 0 with LinearOutSlowInEasing
-                    125.dp at 30 with FastOutLinearInEasing
-                }
-            }
-        )
-        { 100.dp }
-        Icon(
-            imageVector = if (checkState.value) {
-                Icons.Filled.Favorite
-            } else {
-                Icons.Filled.FavoriteBorder
-            },
-            contentDescription = "",
-            modifier = Modifier.size(mySize),
-            tint = myTint
-        )
-    }
-}
 
 @Composable
 fun Loading() {
@@ -283,6 +252,6 @@ fun ConfirmDialog(
 }
 
 @Composable
-fun SpacerH(){
+fun SpacerH() {
     Spacer(Modifier.height(15.dp))
 }
