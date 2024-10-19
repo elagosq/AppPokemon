@@ -35,7 +35,7 @@ fun FavoriteView(navController: NavController, viewModel: FavoritesViewModel = v
     Scaffold(
         topBar = {
             MainTopBar(
-                title = "Favorito",
+                title = "Pokémon Favoritos",
                 showBackButton = true,
                 onClickBackButton = {
                     navController.popBackStack()

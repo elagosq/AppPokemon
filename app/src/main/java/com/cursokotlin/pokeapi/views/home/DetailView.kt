@@ -141,7 +141,7 @@ fun ContentDetailView(
                     .fillMaxWidth()
                     .padding(horizontal = 10.dp),
                 textAlign = TextAlign.Justify,
-                text = stateSpecie.text_description,
+                text = stateSpecie.text_description.replace("\n",""),
                 fontSize = 22.sp,
                 color = Color.Black,
                 fontWeight = FontWeight.ExtraBold
