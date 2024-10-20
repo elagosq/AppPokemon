@@ -20,7 +20,8 @@ Funcionalidades que incorpora la app
 3.  Mostrar el detalle del pokemon seleccionado
 4.  Pantalla de busqueda de un pokemon
 5.  Detalle item del pokemon buscado
-6.  Pantalla para cerrar sesión
+6.  Implementación modulo de favoritos con datastore
+7.  Pantalla para cerrar sesión
 
 1.- Registro de usuario
 
