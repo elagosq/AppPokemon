@@ -13,10 +13,9 @@ fun BlankView(navController: NavController){
     val context = LocalContext.current
     val dataStore = StoreUser(context)
     val userStore = dataStore.getFromLogin.collectAsState(LoginModel())
-    println(userStore)
 
     LaunchedEffect(Unit) {
-        if(userStore.value.email == ""){
+        if(userStore.value.email.isNullOrEmpty()){
             navController.navigate("LoginView")
         }else{
             navController.navigate("HomeView")
