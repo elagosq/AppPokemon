@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.cursokotlin.pokeapi.views.home.BlankView
 import com.cursokotlin.pokeapi.views.home.DetailView
 import com.cursokotlin.pokeapi.views.home.FavoriteView
 import com.cursokotlin.pokeapi.views.home.HomeView
@@ -17,7 +18,11 @@ import com.cursokotlin.pokeapi.views.login.TabsViewLogin
 @Composable
 fun NavManager() {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = "HomeView") {
+    NavHost(navController = navController, startDestination = "Blank") {
+        composable("Blank"){
+            BlankView(navController)
+        }
+
         composable("LoginView") {
             TabsViewLogin(navController)
         }

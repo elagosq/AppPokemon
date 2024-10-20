@@ -15,6 +15,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,11 +29,13 @@ import com.cursokotlin.pokeapi.components.SpacerH
 import com.cursokotlin.pokeapi.model.LoginModel
 import com.cursokotlin.pokeapi.store.StoreUser
 import com.cursokotlin.pokeapi.util.Constants.Companion.CUSTOM_GREEN
+import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun UserView(navController: NavController) {
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
     val dataStore = StoreUser(context)
     val userStore = dataStore.getFromLogin.collectAsState(LoginModel())
 
@@ -75,7 +78,12 @@ fun UserView(navController: NavController) {
                     containerColor = Color(CUSTOM_GREEN),
                     contentColor = Color.White
                 ),
-                onClick = { navController.navigate("LoginView") }) {
+                onClick = {
+                    scope.launch {
+                        dataStore.cleanLogin()
+                        navController.navigate("LoginView")
+                    }
+                }) {
                 Text("Cerrar sesión")
             }
         }
