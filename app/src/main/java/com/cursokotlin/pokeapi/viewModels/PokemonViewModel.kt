@@ -39,7 +39,8 @@ class PokemonViewModel @Inject constructor(private val repo: PokemonRepository) 
     }
 
     val pokemonsPage =
-        Pager(PagingConfig(pageSize = 6)) {
+        Pager(
+            config = PagingConfig(pageSize = 20)) {
             PokemonDataSource(repo)
         }.flow.cachedIn(viewModelScope) //cachedIn una funcionalidad que permite manejar los datos que se esta obteniendo de la paginación y se guardan en cache
 

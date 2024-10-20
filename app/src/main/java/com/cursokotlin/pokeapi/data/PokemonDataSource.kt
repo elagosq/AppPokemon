@@ -6,26 +6,27 @@ import com.cursokotlin.pokeapi.model.PokemonList
 import com.cursokotlin.pokeapi.repository.PokemonRepository
 import okio.IOException
 
-class PokemonDataSource(private val repo: PokemonRepository): PagingSource<Int, PokemonList>() {
+class PokemonDataSource(private val repo: PokemonRepository) : PagingSource<Int, PokemonList>() {
 
-    override fun getRefreshKey(state: PagingState<Int, PokemonList>): Int? {
-        return state.anchorPosition?.let { anchorPosition ->
-            val anchorPage = state.closestPageToPosition(anchorPosition)
-            anchorPage?.prevKey?.plus(1) ?: anchorPage?.nextKey?.minus(1)
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, PokemonList> {
+
+        return try {
+            // Pagina actual (offset), empieza en 0
+            val offset = params.key ?: 0
+            val response = repo.getPokemonsPaging(limit = params.loadSize, offset = offset)
+
+            //Cargar siguiente y anterior página
+            LoadResult.Page(
+                data = response.results,
+                prevKey = if(offset == 0) null else offset - params.loadSize,
+                nextKey = if(response.next == null) null else offset + params.loadSize
+            )
+        } catch (exception: IOException) {
+            LoadResult.Error(exception)
         }
     }
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, PokemonList> {
-        return try {
-            val nextPageNumber = params.key ?: 1
-            val response = repo.getPokemonsPaging(nextPageNumber, 6)
-            LoadResult.Page(
-               data = response.results,
-               prevKey = null,
-               nextKey = if(response.results.isNotEmpty())  nextPageNumber + 1  else null
-            )
-        }catch (exception: IOException){
-            LoadResult.Error(exception)
-        }
+    override fun getRefreshKey(state: PagingState<Int, PokemonList>): Int? {
+        return state.anchorPosition
     }
 }

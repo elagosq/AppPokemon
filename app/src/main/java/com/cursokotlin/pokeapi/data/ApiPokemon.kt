@@ -17,8 +17,8 @@ interface ApiPokemon {
 
     @GET(ENDPOINT)
     suspend fun getPokemonsPaging(
-        @Query("offset") offset: Int,
-        @Query("limit") limit: Int
+        @Query("limit") limit: Int ,
+        @Query("offset") offset: Int
     ): AllPokemon
 
     @GET("$ENDPOINT/{name}")

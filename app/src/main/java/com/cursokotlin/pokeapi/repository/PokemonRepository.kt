@@ -1,5 +1,6 @@
 package com.cursokotlin.pokeapi.repository
 
+import androidx.compose.ui.geometry.Offset
 import com.cursokotlin.pokeapi.data.ApiPokemon
 import com.cursokotlin.pokeapi.model.AllPokemon
 import com.cursokotlin.pokeapi.model.Pokemon
@@ -18,9 +19,9 @@ class PokemonRepository @Inject constructor(private val apiPokemon: ApiPokemon) 
         return null
     }
 
-    suspend fun getPokemonsPaging(page: Int,limit: Int): AllPokemon{
+    suspend fun getPokemonsPaging(offset : Int,limit: Int): AllPokemon{
         delay(3000L)
-        return apiPokemon.getPokemonsPaging(page,limit)
+        return apiPokemon.getPokemonsPaging(offset,limit)
     }
 
     suspend fun getPokemonName(name: String) : Pokemon? {
